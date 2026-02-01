@@ -11,6 +11,9 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  height: 100vh;
+  width: 100vw;
 }
 
 a {
@@ -65,4 +68,10 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.map{
+  background-color: red;
+  height: 100%;
+  width: 100%;
 }

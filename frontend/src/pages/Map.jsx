@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from "react-leaflet";
+import { CircleMarker, LayersControl, MapContainer, Marker, Popup, TileLayer, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-function LocationMarker() {
-  const [position, setPosition] = useState(null);
+const defaultCenter = [23.5120, 80.3290];
 
+function LocationMarker({position, setPosition}) {
+  
   const map = useMapEvents({
     locationfound(e) {
       setPosition(e.latlng);
-      map.flyTo(e.latlng, map.getZoom());
+      map.flyTo(e.latlng);
     },
-});
-
-useEffect(() => {
+  });
+  
+  useEffect(() => {
     map.locate();
-}, [map]);
-
-if (!position) return null;
-console.log(position)
-
+  }, [map]);
+  
+  if (!position) return null;
+  
   return (
     <Marker position={position}>
       <Popup>You are here</Popup>
@@ -27,18 +27,38 @@ console.log(position)
 }
 
 function Map() {
+  const [position, setPosition] = useState(null);
+
   return (
+    <div className="map">
+
     <MapContainer
-      center={[28.639, 77.236]}
-      zoom={15}
-      style={{ height: "100vh", width: "100vw" }}
-    >
+      center={defaultCenter}
+      zoom={18}
+      style={{ height: "90vh", width: "90vw" }}
+      >
       <TileLayer
-        attribution='&copy; OpenStreetMap contributors'
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <LocationMarker />
+        />
+      <LocationMarker position={position} setPosition={setPosition}/>
+      
+      <LayersControl position="topright">
+        <LayersControl.Overlay checked={false} name="Satellite View">
+          <TileLayer
+            url="https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+            subdomains={['mt1','mt2','mt3']}
+            />
+        </LayersControl.Overlay>
+
+        {/* Add geoJSON controls */}
+
+
+      </LayersControl>
     </MapContainer>
+            
+            
+    </div>
   );
 }
 
